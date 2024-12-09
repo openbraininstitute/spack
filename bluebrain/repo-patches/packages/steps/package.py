@@ -12,8 +12,7 @@ class Steps(CMakePackage):
     """STochastic Engine for Pathway Simulation"""
 
     homepage = "https://groups.oist.jp/cnu/software"
-    # no https because the repo is not public
-    git = "git@github.com:CNS-OIST/HBP_STEPS.git"
+    git = "https://github.com/CNS-OIST/STEPS.git"
 
     maintainers("cattabiani")
 
@@ -36,9 +35,19 @@ class Steps(CMakePackage):
         description="Generate non-portable arch-specific code",
     )
     variant("blender", default=False, description="Build stepsblender package")
-    variant("lapack", default=False, description="Use new BDSystem/Lapack code for E-Field solver")
-    variant("distmesh", default=True, description="Add solvers based on distributed mesh")
-    variant("petsc", default=True, description="Use PETSc library for parallel E-Field solver")
+    variant(
+        "lapack",
+        default=False,
+        description="Use new BDSystem/Lapack code for E-Field solver",
+    )
+    variant(
+        "distmesh", default=True, description="Add solvers based on distributed mesh"
+    )
+    variant(
+        "petsc",
+        default=True,
+        description="Use PETSc library for parallel E-Field solver",
+    )
     variant("mpi", default=True, description="Use MPI for parallel solvers")
     variant("bundle", default=False, description="Use bundled libraries")
     variant("stochtests", default=True, description="Add stochastic tests to ctests")
@@ -46,13 +55,23 @@ class Steps(CMakePackage):
         "build_type",
         default="RelWithDebInfo",
         description="CMake build type",
-        values=("Debug", "Release", "RelWithDebInfo", "MinSizeRel", "RelWithDebInfoAndAssert"),
+        values=(
+            "Debug",
+            "Release",
+            "RelWithDebInfo",
+            "MinSizeRel",
+            "RelWithDebInfoAndAssert",
+        ),
     )
     variant(
-        "caliper", default=False, description="Build in caliper support (Instrumentor Interface)"
+        "caliper",
+        default=False,
+        description="Build in caliper support (Instrumentor Interface)",
     )
     variant(
-        "likwid", default=False, description="Build in likwid support (Instrumentor Interface)"
+        "likwid",
+        default=False,
+        description="Build in likwid support (Instrumentor Interface)",
     )
     variant("vesicle", default=True, when="@5:", description="Add vesicle model")
 
@@ -95,7 +114,11 @@ class Steps(CMakePackage):
     def patch(self):
         # easylogging is a terrible library that requires compilation by
         # its dependents: splice in disabling all errors
-        filter_file(r"(-Wno-double-promotion)", r"-Wno-error \1", "src/steps/util/CMakeLists.txt")
+        filter_file(
+            r"(-Wno-double-promotion)",
+            r"-Wno-error \1",
+            "src/steps/util/CMakeLists.txt",
+        )
         # unittest2 is unmaintained, shan't be used and does not build with modern Python
         filter_file("unittest2", "", "requirements.txt", ignore_absent=True)
 
@@ -125,7 +148,13 @@ class Steps(CMakePackage):
         args.extend(
             [
                 self.define_from_variant(f"USE_BUNDLE_{bundle}", "bundle")
-                for bundle in ["EASYLOGGINGPP", "OMEGA_H", "RANDOM123", "SUNDIALS", "SUPERLU_DIST"]
+                for bundle in [
+                    "EASYLOGGINGPP",
+                    "OMEGA_H",
+                    "RANDOM123",
+                    "SUNDIALS",
+                    "SUPERLU_DIST",
+                ]
             ]
         )
 
