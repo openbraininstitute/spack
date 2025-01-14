@@ -28,6 +28,7 @@ class Mpich(AutotoolsPackage, CudaPackage, ROCmPackage):
     keep_werror = "specific"
 
     version("develop", submodules=True)
+    version("4.2.3", sha256="7a019180c51d1738ad9c5d8d452314de65e828ee240bcb2d1f80de9a65be88a8")
     version("4.1.2", sha256="3492e98adab62b597ef0d292fb2459b6123bc80070a8aa0a30be6962075a12f0")
     version("4.1.1", sha256="ee30471b35ef87f4c88f871a5e2ad3811cd9c4df32fd4f138443072ff4284ca2")
     version("4.1", sha256="8b1ec63bc44c7caa2afbb457bc5b3cd4a70dbe46baba700123d67c48dc5ab6a0")
@@ -57,11 +58,13 @@ class Mpich(AutotoolsPackage, CudaPackage, ROCmPackage):
     variant("verbs", default=False, description="Build support for OpenFabrics verbs.")
     variant("slurm", default=False, description="Enable SLURM support")
     variant("wrapperrpath", default=True, description="Enable wrapper rpath")
+    # pmi=off is not an option anymore
+    # https://github.com/spack/spack/issues/42685
     variant(
         "pmi",
         default="pmi",
         description="""PMI interface.""",
-        values=("off", "pmi", "pmi2", "pmix", "cray"),
+        values=(conditional("off", when="@:4.1.1"), "pmi", "pmi2", "pmix", "cray"),
         multi=False,
     )
     variant(

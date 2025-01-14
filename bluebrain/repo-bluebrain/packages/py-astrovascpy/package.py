@@ -11,12 +11,11 @@ class PyAstrovascpy(PythonPackage):
     Vasculature blood flow computation and impact of astrocytic
     endfeet on vessels
     """
-
-    homepage = "https://github.com/BlueBrain/AstroVascPy"
-    git = "https://github.com/BlueBrain/AstroVascPy.git"
+    homepage = "https://github.com/openbraininstitute/AstroVascPy"
+    git = "https://github.com/openbraininstitute/AstroVascPy.git"
     pypi = "AstroVascPy/AstroVascPy-0.1.5.tar.gz"
 
-    maintainers("tristan0x")
+    maintainers("cattabiani")
 
     version("0.1.5", sha256="9f444775f464de740590f8acd880caae87ca1ffdf7d524490d6b8ce21bb4d5af")
     version("0.1.2", tag="0.1.2")
