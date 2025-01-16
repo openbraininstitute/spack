@@ -1,4 +1,4 @@
-from spack.package import conflicts, version
+from spack.package import *
 from spack.pkg.builtin.py_numpy_quaternion import PyNumpyQuaternion as BuiltinPyNumpyQuaternion
 
 
