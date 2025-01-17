@@ -10,9 +10,9 @@ class PyMultiscaleRun(PythonPackage):
     """BBP multiscale simulation orchestrator"""
 
     homepage = "https://github.com/BlueBrain/MultiscaleRun"
-    git = "ssh://git@bbpgitlab.epfl.ch/hpc/MultiscaleRun.git"
+    git = "git@github.com:openbraininstitute/MultiscaleRun.git"
 
-    maintainers("tristan0x", "cattabiani")
+    maintainers("cattabiani")
 
     version("develop", branch="main")
     version("0.8.1", tag="0.8.1")
