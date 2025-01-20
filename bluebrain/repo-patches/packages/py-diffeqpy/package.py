@@ -13,8 +13,9 @@ class PyDiffeqpy(PythonPackage):
     homepage = "https://github.com/SciML/diffeqpy"
     pypi = "diffeqpy/diffeqpy-2.3.0.tar.gz"
 
-    maintainers("tristan0x")
+    maintainers("cattabiani")
 
+    version("2.5.3", sha256="1136f0e0510e76d86976f072f34773ae417f60e771ace5d6f667014b8725e13a")
     version("2.3.0", sha256="14d31321a5463a706733cc137d04e5bcf5cc22d44b6a44958ecd9972752041a1")
     version("1.1.0", sha256="0ff315bf3d4345a83dc623b614e39c8365302df1cc9d36dcb8ce782d926f255b")
 
