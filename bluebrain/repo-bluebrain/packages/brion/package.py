@@ -35,7 +35,10 @@ class Brion(CMakePackage):
         when="~python",
     )
     depends_on(
-        "boost@:1.73 +date_time+filesystem+iostreams+program_options+regex+shared+system+test+python",
+        (
+            "boost@:1.73 +date_time+filesystem+iostreams+program_options+regex+shared"
+            "+system+test+python"
+        ),
         when="+python",
     )
 
