@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import os
+
 from spack.package import *
 
 
@@ -72,10 +74,23 @@ class NeurodamusModels(CMakePackage):
         env.set(f"NEURODAMUS_{mech.upper()}_ROOT", self.prefix)
         env.set("HOC_LIBRARY_PATH", self.prefix.share.join(f"neurodamus_{mech}").hoc)
         if "+coreneuron" in self.spec:
-            env.set("CORENEURONLIB", self.prefix.lib + "/libcorenrnmech.so")
-        for libnrnmech_name in find(self.prefix.lib, "libnrnmech*.so", recursive=False):
-            env.set("NRNMECH_LIB_PATH", libnrnmech_name)
-            env.set("BLUECELLULAB_MOD_LIBRARY_PATH", libnrnmech_name)
+            if os.path.exists(self.prefix.lib + "/libcorenrnmech.so"):
+                env.set("CORENEURONLIB", self.prefix.lib + "/libcorenrnmech.so")
+            elif os.path.exists(self.prefix.lib + "/libcorenrnmech.dylib"):
+                env.set("CORENEURONLIB", self.prefix.lib + "/libcorenrnmech.dylib")
+            else:
+                Exception("No CORENEURONLIB found!")
+
+        libnrnmech_name = find(self.prefix.lib, "libnrnmech*.so", recursive=False) or find(
+            self.prefix.lib, "libnrnmech*.dylib", recursive=False
+        )
+        if len(libnrnmech_name) == 1:
+            env.set("NRNMECH_LIB_PATH", libnrnmech_name[0])
+            env.set("BLUECELLULAB_MOD_LIBRARY_PATH", libnrnmech_name[0])
+        else:
+            raise Exception(
+                f"Ambiguous number of libnrnmech* libraries found: {''.join(libnrnmech_name)}"
+            )
 
         # ENV variables to enable Caliper with certain settings
         if "+caliper" in self.spec:
