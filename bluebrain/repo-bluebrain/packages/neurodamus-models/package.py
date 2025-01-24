@@ -81,9 +81,7 @@ class NeurodamusModels(CMakePackage):
             else:
                 Exception("No CORENEURONLIB found!")
 
-        libnrnmech_name = find(self.prefix.lib, "libnrnmech*.so", recursive=False)
-        if len(libnrnmech_name) == 0:
-            libnrnmech_name = find(self.prefix.lib, "libnrnmech*.dylib", recursive=False)
+        libnrnmech_name = find(self.prefix.lib, "libnrnmech*.so", recursive=False) or find(self.prefix.lib, "libnrnmech*.dylib", recursive=False)
         if len(libnrnmech_name) == 1:
             env.set("NRNMECH_LIB_PATH", libnrnmech_name[0])
             env.set("BLUECELLULAB_MOD_LIBRARY_PATH", libnrnmech_name[0])
