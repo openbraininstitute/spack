@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import os
+
 from spack.package import *
 
 
@@ -72,8 +74,6 @@ class NeurodamusModels(CMakePackage):
         env.set(f"NEURODAMUS_{mech.upper()}_ROOT", self.prefix)
         env.set("HOC_LIBRARY_PATH", self.prefix.share.join(f"neurodamus_{mech}").hoc)
         if "+coreneuron" in self.spec:
-            import os
-
             if os.path.exists(self.prefix.lib + "/libcorenrnmech.so"):
                 env.set("CORENEURONLIB", self.prefix.lib + "/libcorenrnmech.so")
             elif os.path.exists(self.prefix.lib + "/libcorenrnmech.dylib"):
@@ -81,9 +81,9 @@ class NeurodamusModels(CMakePackage):
             else:
                 Exception("No CORENEURONLIB found!")
 
-        libnrnmech_name = find(self.prefix.lib, "libnrnmech*.so", recursive=False) + find(
-            self.prefix.lib, "libnrnmech*.dylib", recursive=False
-        )
+        libnrnmech_name = find(self.prefix.lib, "libnrnmech*.so", recursive=False)
+        if len(libnrnmech_name) == 0:
+            libnrnmech_name = find(self.prefix.lib, "libnrnmech*.dylib", recursive=False)
         if len(libnrnmech_name) == 1:
             env.set("NRNMECH_LIB_PATH", libnrnmech_name[0])
             env.set("BLUECELLULAB_MOD_LIBRARY_PATH", libnrnmech_name[0])
