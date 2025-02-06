@@ -13,10 +13,8 @@ the following:
 
 To install end-user software on MacOS, please defer to `brew`.
 
-Before starting, please install XCode and `brew` and make sure that there
-is a working Python on your machine, preferably from XCode or another
-*stable* source.
-It is recommended to rebuild a Spack-based Python for utmost independence
+Before starting, please install XCode and `brew`. Since 
+the shipped version of python on mac is very old (3.9 at the time of writing), it is recommended to rebuild a Spack-based Python for utmost independence
 and to minimize potential build problems for binary Python libraries.
 
 If issues arise to find `stdio.h` correctly building software outside the
@@ -33,6 +31,11 @@ Then install a Fortran compiler, which Spack will pick up and use in
 conjunction with Apple's CLang:
 
     $ brew install gcc
+
+If needed, the following packages are best installed using `brew` and added as external dependencies:
+
+    $ brew install binutils
+    $ brew install flex
 
 ### Building software on Ubuntu
 
@@ -66,6 +69,53 @@ Now clone our version of Spack and find compilers and external packages:
     $ . spack/share/spack/setup-env.sh
     $ spack compiler find
     $ spack external find
+
+### MacOS users
+
+#### Compilers
+
+On macOS, the compiler setup is hybrid. Clang is the most supported compiler, but it lacks a Fortran component. To work around this, we use Clang for C and C++, while Fortran support comes from GCC. Spack should automatically handle this configuration.
+
+To ensure the setup is correct, check that `.spack/packages.yaml` includes at least the following:
+
+```yaml
+compilers:
+- compiler:
+    spec: apple-clang@=16.0.0
+    paths:
+      cc: /usr/bin/clang
+      cxx: /usr/bin/clang++
+      f77: /opt/homebrew/bin/gfortran-14
+      fc: /opt/homebrew/bin/gfortran-14
+    flags: {}
+    operating_system: macos
+    target: aarch64
+    modules: []
+    environment: {}
+    extra_rpaths: []
+```
+
+You may have additional compilers installed, but if you encounter compilation issues, we recommend removing them and keeping this setup, as it is the most tested configuration.
+
+#### External Packages
+
+You can check the external packages in `.spack/packages.yaml`. It is recommended to install `binutils` and `flex` using `brew`. The configuration should include at least the following:
+
+```yaml
+packages:
+  flex:
+    externals:
+      - spec: flex@2.6.4+lex
+        prefix: /usr
+  binutils:
+    externals:
+      - spec: binutils@2.43.1
+        prefix: /opt/homebrew/opt/binutils
+    buildable: false
+```
+
+Additional packages may also be present.
+
 
 ### Additional Configuration
 
