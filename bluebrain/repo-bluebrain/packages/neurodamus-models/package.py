@@ -11,8 +11,8 @@ from spack.package import *
 class NeurodamusModels(CMakePackage):
     """Neuroscientific models to be used with Neurodamus"""
 
-    homepage = "https://github.com/BlueBrain/neurodamus-models"
-    git = "https://github.com/BlueBrain/neurodamus-models.git"
+    homepage = "https://github.com/openbraininstitute/neurodamus-models"
+    git = "https://github.com/openbraininstitute/neurodamus-models.git"
 
     version("develop", branch="main")
     version("2.4.1", tag="2.4.1")
@@ -53,6 +53,8 @@ class NeurodamusModels(CMakePackage):
 
     depends_on("py-neurodamus", type=("build", "run"))
     depends_on("libsonata-report")
+
+    conflicts("+ngv+coreneuron", msg="+ngv+coreneuron at the moment fail compilation")
 
     def cmake_args(self):
         args = [

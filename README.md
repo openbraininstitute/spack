@@ -9,18 +9,22 @@ Workflows](bluebrain/documentation/Workflows.md).
 For some common issues, please see the [FAQ](bluebrain/documentation/FAQ.md). Further
 documentation:
 
-* [Setting Spack up on BlueBrain5](bluebrain/documentation/setup_bb5.md)
+
 * [Setting Spack up on personal machines](bluebrain/documentation/setup_personal.md)
 * [Installing software from local sources directories](bluebrain/documentation/installing_from_source.md)
 * [Installing software using environments](bluebrain/documentation/installing_with_environments.md),
   allowing to customize software used in complex build scenarios
 * [Using installed software in an IDE](bluebrain/documentation/using_installed_software_in_an_ide.md)
 * [Creating and updating packages](bluebrain/documentation/packages.md)
+* [Reproducing a failed CI build](bluebrain/documentation/reproduce_ci.md)
+* [Upstreaming a package](bluebrain/documentation/upstreaming.md)
+
+Old documentation about BlueBrain5 (BB5):
+
+* [Setting Spack up on BlueBrain5](bluebrain/documentation/setup_bb5.md)
 * [Deploying modules on BlueBrain5](bluebrain/documentation/deploy_bb5.md)
 * [Debugging pull requests on BlueBrain5](bluebrain/documentation/debug_bb5.md)
 * [Continuous Integration with Spack on BlueBrain5](bluebrain/documentation/ci_bb5.md)
-* [Reproducing a failed CI build](bluebrain/documentation/reproduce_ci.md)
-* [Upstreaming a package](bluebrain/documentation/upstreaming.md)
 
 # <img src="https://cdn.rawgit.com/spack/spack/develop/share/spack/logo/spack-logo.svg" width="64" valign="middle" alt="Spack"/> Spack
 
