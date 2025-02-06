@@ -9,7 +9,7 @@ import os
 import textwrap
 from argparse import ArgumentParser
 
-from git import Commit, Repo
+from git import Repo
 
 EXISTING_PACKAGES = []
 
@@ -41,7 +41,7 @@ def get_changed_tags(changed_files: list[str]) -> set[str]:
     if any(
         changed_file.endswith("yml")
         or changed_file.endswith("yaml")
-        and not "github" in changed_file
+        and "github" not in changed_file
         for changed_file in changed_files
     ):
         changed_packages.append("deploy")
@@ -66,26 +66,26 @@ def collect_prefixes(message: str) -> set[str]:
     return set(prefixes)
 
 
-def suggested_solution(l: list[str], inline: bool) -> str:
-    if len(l) > 5:
+def suggested_solution(tags: list[str], inline: bool) -> str:
+    if len(tags) > 5:
         return ""
 
     if inline:
         return f"""\
 #### Suggested solution:
 ```
-{', '.join(l)}: <description (optional)>
+{', '.join(tags)}: <description (optional)>
 ```
 """
 
-    ss = "\n".join(f"{item}: <description (optional)>" for item in l)
+    ss = "\n".join(f"{item}: <description (optional)>" for item in tags)
     return f"""\
 #### Suggested solution:
 ```
-{', '.join(l)}: <description (optional)>
+{', '.join(tags)}: <description (optional)>
 ```
 
-or 
+or
 
 ```
 {ss}
@@ -98,15 +98,15 @@ def process_title(message: str, changed_tags: set[str]) -> str:
     if prefixes & changed_tags:
         return ""
 
-    l = list(changed_tags)
+    tags = list(changed_tags)
 
     return f"""\
 ## PR title issues
 
-None of the modified packages or code regions: `{', '.join(l)}` were mentioned. Please,
-mention at least one of them. 
+None of the modified packages or code regions: `{', '.join(tags)}` were mentioned. Please,
+mention at least one of them.
 
-#### Tips: 
+#### Tips:
 
 It is suggested to mention the most important package(s) and describe why the change is necessary.
 
@@ -115,7 +115,7 @@ It is suggested to mention the most important package(s) and describe why the ch
 ```
 package1, package2, package3: <description (optional)>
 ```
-{suggested_solution(l, True)}
+{suggested_solution(tags, True)}
 """
 
 
@@ -124,20 +124,20 @@ def process_commit_message(message: str, changed_tags: set[str]) -> str:
     if prefixes & changed_tags:
         return ""
 
-    l = list(changed_tags)
+    tags = list(changed_tags)
 
     return f"""\
 ## Commit Message issues
 
-None of the modified packages or code regions: `{', '.join(l)}` were mentioned in the commit:
+None of the modified packages or code regions: `{', '.join(tags)}` were mentioned in the commit:
 
 ```
 {message}
 ```
 
-Please, mention at least one of them. 
+Please, mention at least one of them.
 
-#### Tips: 
+#### Tips:
 
 It is suggested to mention the most important package(s) and describe why the change is necessary.
 
@@ -150,11 +150,11 @@ package1, package2, package3: <description (optional)>
 or:
 
 ```
-package1: <description (optional)> 
-package2: <description (optional)> 
+package1: <description (optional)>
+package2: <description (optional)>
 package3: <description (optional)>
 ```
-{suggested_solution(l, False)}
+{suggested_solution(tags, False)}
 """
 
 
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--changed-files", required=True, help="JSON formatted list of files changed in PR"
     )
-    
+
     parser.add_argument("--commits", required=True, help="Number of commits in the PR")
 
     args = parser.parse_args()
