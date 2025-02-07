@@ -9,7 +9,7 @@ import os
 import textwrap
 from argparse import ArgumentParser
 
-from git import Commit, Repo
+from git import Repo
 
 EXISTING_PACKAGES = []
 
@@ -22,7 +22,7 @@ logger.addHandler(sh)
 logger.setLevel(logging.DEBUG)
 
 
-def get_changed_packages(changed_files: list[str]) -> list[str]:
+def get_changed_tags(changed_files: list[str]) -> set[str]:
     """
     Return all packages changed by the commit
     """
@@ -35,30 +35,22 @@ def get_changed_packages(changed_files: list[str]) -> list[str]:
         changed_packages.append(path_components[path_components.index("packages") + 1])
 
     logger.debug("Changed packages: %s", changed_packages)
-    return changed_packages
+
+    if any("documentation" in changed_file for changed_file in changed_files):
+        changed_packages.append("docs")
+    if any(
+        changed_file.endswith("yml")
+        or changed_file.endswith("yaml")
+        and "github" not in changed_file
+        for changed_file in changed_files
+    ):
+        changed_packages.append("deploy")
+    if any("github" in changed_file for changed_file in changed_files):
+        changed_packages.append("ci")
+    return set(changed_packages)
 
 
-def get_unmentioned_packages(prefixes: list[str], changed_files: list[str]) -> list[str]:
-    unmentioned_packages = []
-
-    changed_packages = get_changed_packages(changed_files)
-
-    for package in changed_packages:
-        if package not in prefixes:
-            unmentioned_packages.append(package)
-
-    logger.debug("Packages changed but not mentioned: %s", unmentioned_packages)
-    return unmentioned_packages
-
-
-def one_package_mentioned(prefixes: list[str], changed_files: list[str]) -> list[str]:
-    """Check whether at least one changed package is mentioned"""
-
-    changed_packages = get_changed_packages(changed_files)
-    return len([prefix for prefix in prefixes if prefix in changed_packages]) > 0
-
-
-def collect_prefixes(message: str) -> list[str]:
+def collect_prefixes(message: str) -> set[str]:
     """
     Collect all prefixes in the commit message
     """
@@ -71,67 +63,99 @@ def collect_prefixes(message: str) -> list[str]:
             prefixes.extend(prefix_items)
 
     logger.debug("Prefixes: %s", prefixes)
-    return prefixes
+    return set(prefixes)
 
 
-def process_message(
-    message: str,
-    changed_files: list[str],
-    docs_changed: bool,
-    deploy_changed: bool,
-    commit: Commit = None,
-) -> str:
-    """
-    Process a message (PR title or commit message).
-    If issues are found, return a message describing them.
-    """
-    logger.debug("Processing message: %s", message)
+def suggested_solution(tags: list[str], inline: bool) -> str:
+    if len(tags) > 5:
+        return ""
+
+    if inline:
+        return f"""\
+#### Suggested solution:
+```
+{', '.join(tags)}: <description (optional)>
+```
+"""
+
+    ss = "\n".join(f"{item}: <description (optional)>" for item in tags)
+    return f"""\
+#### Suggested solution:
+```
+{', '.join(tags)}: <description (optional)>
+```
+
+or
+
+```
+{ss}
+```
+"""
+
+
+def process_title(message: str, changed_tags: set[str]) -> str:
     prefixes = collect_prefixes(message)
-    message = ""
+    if prefixes & changed_tags:
+        return ""
 
-    minimal_prefix_present = False
-    if one_package_mentioned(prefixes, changed_files):
-        logger.debug("At least one package was mentioned")
-        minimal_prefix_present = True
-    elif docs_changed and "docs" in prefixes:
-        logger.debug("Docs were changed and mentioned")
-        minimal_prefix_present = True
-    elif deploy_changed and "deploy" in prefixes:
-        logger.debug("Deploy was changed and mentioned")
-        minimal_prefix_present = True
+    tags = list(changed_tags)
 
-    if not minimal_prefix_present:
-        unmentioned_packages = get_unmentioned_packages(prefixes, changed_files)
-        if unmentioned_packages:
-            message += textwrap.dedent(
-                f"""\
-                * The following packages were changed but not mentioned:
-                  `{", ".join(unmentioned_packages)}:`
-                  You can simply use the above list, \
-                  then explain what you changed.
-                  Alternatively, you can use one line per package \
-                  to describe the change per package.
-                  Please mention at least one package.
-                """
-            )
+    return f"""\
+## PR title issues
 
-        if docs_changed and "docs" not in prefixes:
-            message += textwrap.dedent(
-                """\
-                * Docs were changed but not mentioned.
-                  Please use the `docs:` prefix to explain this change.
-                """
-            )
+None of the modified packages or code regions: `{', '.join(tags)}` were mentioned. Please,
+mention at least one of them.
 
-        if deploy_changed and "deploy" not in prefixes:
-            message += textwrap.dedent(
-                """\
-                * Deploy files were changed but not mentioned.
-                  Please use the `deploy:` prefix to explain this change.
-                """
-            )
+#### Tips:
 
-    return message
+It is suggested to mention the most important package(s) and describe why the change is necessary.
+
+#### Example:
+
+```
+package1, package2, package3: <description (optional)>
+```
+{suggested_solution(tags, True)}
+"""
+
+
+def process_commit_message(message: str, changed_tags: set[str]) -> str:
+    prefixes = collect_prefixes(message)
+    if prefixes & changed_tags:
+        return ""
+
+    tags = list(changed_tags)
+
+    return f"""\
+## Commit Message issues
+
+None of the modified packages or code regions: `{', '.join(tags)}` were mentioned in the commit:
+
+```
+{message}
+```
+
+Please, mention at least one of them.
+
+#### Tips:
+
+It is suggested to mention the most important package(s) and describe why the change is necessary.
+
+#### Example:
+
+```
+package1, package2, package3: <description (optional)>
+```
+
+or:
+
+```
+package1: <description (optional)>
+package2: <description (optional)>
+package3: <description (optional)>
+```
+{suggested_solution(tags, False)}
+"""
 
 
 def main(title: str, changed_files: list[str], commits: int) -> None:
@@ -145,65 +169,30 @@ def main(title: str, changed_files: list[str], commits: int) -> None:
     logger.debug("Title: %s", title)
     logger.debug("Changed files: %s", changed_files)
 
-    message_issues = []
+    message_issues = ""
     commit_issue = None
     title_issue = None
-    warning = ""
-
-    docs_changed = any("documentation" in changed_file for changed_file in changed_files)
-    deploy_changed = any(
-        changed_file.endswith("yml") or changed_file.endswith("yaml")
-        for changed_file in changed_files
-    )
+    changed_tags = get_changed_tags(changed_files)
 
     if commits > 1:
-        title_issue = process_message(title, changed_files, docs_changed, deploy_changed)
+        title_issue = process_title(title, changed_tags)
     else:
-        title_issue = process_message(title, changed_files, docs_changed, deploy_changed)
+        title_issue = process_title(title, changed_tags)
 
         commit = next(repo.iter_commits())
         logger.info(f"Checking commit: {commit.message} (parents: {commit.parents})")
 
-        commit_issue = process_message(
-            commit.message, changed_files, docs_changed, deploy_changed, commit
-        )
+        commit_issue = process_commit_message(commit.message, changed_tags)
 
     if title_issue:
-        message_issues.append(title_issue)
-        warning += textwrap.dedent(
-            """\
-            There are one or more issues with the title of this PR.
-            """
-        )
+        message_issues += title_issue
 
     if commit_issue:
-        message_issues.append(commit_issue)
-        quoted_commit_message = textwrap.indent(commit.message, prefix="  > ")
+        message_issues += commit_issue
 
-        warning += textwrap.dedent(
-            f"""\
-            There are one or more issues with the commit message of commit {commit.hexsha}.
-            Commit message:
-
-            {quoted_commit_message}
-            """
-        )
-
-    if commit_issue or title_issue:
-        if commits == 1:
-            one_commit = "The commit message of your commit must be compliant as well."
-        else:
-            one_commit = ""
-        warning += textwrap.dedent(
-            f"""\
-            Please satisfy at least one of the checks (one package, docs, or deploy).
-            The PR title must be compliant. {one_commit}
-            Issues:
-            """
-        )
-        message_issues.insert(0, warning)
+    if len(message_issues):
         with open("message_issues.txt", "w") as fp:
-            fp.write("\n".join(message_issues))
+            fp.write(textwrap.dedent(message_issues))
         with open(os.environ["GITHUB_OUTPUT"], "a") as fp:
             fp.write("faulty-commits=true")
 
@@ -216,10 +205,9 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--title", required=True, help="PR title")
     parser.add_argument(
-        "--changed-files",
-        required=True,
-        help="JSON formatted list of files changed in PR",
+        "--changed-files", required=True, help="JSON formatted list of files changed in PR"
     )
+
     parser.add_argument("--commits", required=True, help="Number of commits in the PR")
 
     args = parser.parse_args()
