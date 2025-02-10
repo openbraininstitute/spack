@@ -15,6 +15,7 @@ class NeurodamusModels(CMakePackage):
     git = "https://github.com/openbraininstitute/neurodamus-models.git"
 
     version("develop", branch="main")
+    version("2.4.2", tag="2.4.2")
     version("2.4.1", tag="2.4.1")
     version("2.4.0", tag="2.4.0")
     version("2.3.0", tag="2.3.0")
