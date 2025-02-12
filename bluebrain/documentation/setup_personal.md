@@ -65,7 +65,7 @@ To check that we are using Python 3 as `python`:
 
 Now clone our version of Spack and find compilers and external packages:
 
-    $ git clone -c feature.manyFiles=true https://github.com/BlueBrain/spack.git
+    $ git clone -c feature.manyFiles=true git@github.com:openbraininstitute/spack.git
     $ . spack/share/spack/setup-env.sh
     $ spack compiler find
     $ spack external find
