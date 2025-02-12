@@ -14,8 +14,8 @@ class LibsonataReport(CMakePackage):
     https://github.com/AllenInstitute/sonata/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
     """
 
-    homepage = "https://github.com/BlueBrain/libsonatareport"
-    git = "https://github.com/BlueBrain/libsonatareport.git"
+    homepage = "https://github.com/openbraininstitute/libsonatareport"
+    git = "https://github.com/openbraininstitute/libsonatareport.git"
 
     version("develop", branch="master", submodules=False, get_full_repo=True)
     version("1.2.5", tag="1.2.5", submodules=False)

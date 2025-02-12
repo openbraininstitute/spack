@@ -9,8 +9,8 @@ from spack.package import *
 class PyLibsonata(PythonPackage):
     """SONATA files reader"""
 
-    homepage = "https://github.com/BlueBrain/libsonata"
-    git = "https://github.com/BlueBrain/libsonata.git"
+    homepage = "https://github.com/openbraininstitute/libsonata"
+    git = "https://github.com/openbraininstitute/libsonata.git"
     pypi = "libsonata/libsonata-0.1.14.tar.gz"
 
     maintainers("tristan0x")
