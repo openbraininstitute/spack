@@ -14,8 +14,8 @@ class Libsonata(CMakePackage):
     https://github.com/AllenInstitute/sonata/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
     """
 
-    homepage = "https://github.com/BlueBrain/libsonata"
-    git = "https://github.com/BlueBrain/libsonata.git"
+    homepage = "https://github.com/openbraininstitute/libsonata"
+    git = "https://github.com/openbraininstitute/libsonata.git"
     url = "https://pypi.io/packages/source/l/libsonata/libsonata-0.1.14.tar.gz"
 
     version("develop", branch="master", get_full_repo=True)
