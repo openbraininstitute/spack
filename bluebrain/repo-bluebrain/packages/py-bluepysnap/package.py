@@ -10,7 +10,7 @@ class PyBluepysnap(PythonPackage):
     """Blue Brain SNAP is a Python library for accessing BlueBrain circuit models
     represented in SONATA format."""
 
-    homepage = "https://github.com/BlueBrain/snap"
+    homepage = "https://github.com/openbraininstitute/snap"
     pypi = "bluepysnap/bluepysnap-0.12.0.tar.gz"
 
     version("3.0.1", sha256="733bf35f90d11a70284793f0f0974fea628f70a47f16c4a200872ef75f36b597")
@@ -23,7 +23,8 @@ class PyBluepysnap(PythonPackage):
 
     depends_on("python@3.8:", type=("build", "run"))
     depends_on("py-setuptools", type=("build", "run"))
-    depends_on("py-setuptools-scm@:7", type="build")
+    # It was pinned to :7. I do not know why. I try to remove it (Katta)
+    depends_on("py-setuptools-scm", type="build")
 
     depends_on("py-cached-property@1.0:", type=("build", "run"))
     depends_on("py-h5py@3.0.1:3", type=("build", "run"))
