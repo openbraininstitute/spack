@@ -9,7 +9,7 @@ from spack.package import *
 class PyMorphTool(PythonPackage):
     """Python morphology manipulation toolkit"""
 
-    homepage = "https://github.com/BlueBrain/morph-tool"
+    homepage = "https://github.com/openbraininstitute/morph-tool"
     git = "https://github.com/BlueBrain/morph-tool.git"
     pypi = "morph-tool/morph-tool-2.9.1.tar.gz"
 
@@ -22,7 +22,7 @@ class PyMorphTool(PythonPackage):
     variant("parallel", default=False, description="Enable additional parallel support")
 
     depends_on("py-setuptools", type="build")
-    depends_on("py-setuptools-scm@:7", type="build")
+    depends_on("py-setuptools-scm@:8", type="build")
 
     depends_on("py-click@6.7:", type=("build", "run"))
     depends_on("py-deprecation@2.1.0:", type=("build", "run"))
