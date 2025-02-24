@@ -9,8 +9,8 @@ from spack.package import *
 class ParquetConverters(CMakePackage):
     """Parquet conversion tools developed by Blue Brain Project, EPFL"""
 
-    homepage = "https://github.com/BlueBrain/parquet-converters"
-    git = "https://github.com/BlueBrain/parquet-converters.git"
+    homepage = "https://github.com/openbraininstitute/parquet-converters"
+    git = "https://github.com/openbraininstitute/parquet-converters.git"
 
     submodules = True
 
