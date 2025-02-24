@@ -22,7 +22,8 @@ class PyMorphTool(PythonPackage):
     variant("parallel", default=False, description="Enable additional parallel support")
 
     depends_on("py-setuptools", type="build")
-    depends_on("py-setuptools-scm@:8", type="build")
+    # It was pinned to :7. I do not know why. I try to remove it (Katta)
+    depends_on("py-setuptools-scm", type="build")
 
     depends_on("py-click@6.7:", type=("build", "run"))
     depends_on("py-deprecation@2.1.0:", type=("build", "run"))

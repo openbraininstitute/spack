@@ -23,7 +23,8 @@ class PyBluepysnap(PythonPackage):
 
     depends_on("python@3.8:", type=("build", "run"))
     depends_on("py-setuptools", type=("build", "run"))
-    depends_on("py-setuptools-scm@:8", type="build")
+    # It was pinned to :7. I do not know why. I try to remove it (Katta)
+    depends_on("py-setuptools-scm", type="build")
 
     depends_on("py-cached-property@1.0:", type=("build", "run"))
     depends_on("py-h5py@3.0.1:3", type=("build", "run"))
