@@ -9,8 +9,8 @@ from spack.package import *
 class Appositionizer(CMakePackage):
     """Detects appositions between cells"""
 
-    homepage = "https://github.com/BlueBrain/appositionizer"
-    git = "https://github.com/BlueBrain/appositionizer.git"
+    homepage = "https://github.com/openbraininstitute/appositionizer"
+    git = "https://github.com/openbraininstitute/appositionizer.git"
 
     generator("ninja")
     submodules = True
