@@ -12,6 +12,8 @@ class Nmodl(CMakePackage):
     url = "https://github.com/BlueBrain/nmodl.git"
     git = "https://github.com/BlueBrain/nmodl.git"
 
+    submodules = True
+
     version("develop", branch="master", submodules=True)
     version("llvm", branch="llvm", submodules=True)
     version("0.7.a4", commit="79101467912f9690b6c40a1d3eed7315e3ea9bc4")
@@ -46,8 +48,8 @@ class Nmodl(CMakePackage):
     depends_on("fmt+pic", when="+python")
     depends_on("fmt@8.0:8", when="@:0.4 ~python")
     depends_on("fmt+pic@8.0:8", when="@:0.4 +python")
-    depends_on("fmt@8:", when="@0.5: ~python")
-    depends_on("fmt+pic@8:", when="@0.5: +python")
+    depends_on("fmt@8:10", when="@0.5: ~python")
+    depends_on("fmt+pic@8:10", when="@0.5: +python")
     depends_on("nlohmann-json")
     depends_on("python@3.6.0:")
     depends_on("py-jinja2@2.10:", type=("build", "run"))
@@ -82,6 +84,9 @@ class Nmodl(CMakePackage):
             self.define_from_variant("NMODL_ENABLE_LLVM_CUDA", "llvm_cuda"),
         ]
         return options
+
+    def patch(self):
+        filter_file(r"->ignore_case\(\)", "", "src/main.cpp")
 
     def setup_build_environment(self, env):
         env.prepend_path("PYTHONPATH", self.prefix.lib)
