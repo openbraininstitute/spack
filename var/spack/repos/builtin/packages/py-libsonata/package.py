@@ -13,7 +13,7 @@ class PyLibsonata(PythonPackage):
     git = "https://github.com/openbraininstitute/libsonata.git"
     pypi = "libsonata/libsonata-0.1.14.tar.gz"
 
-    maintainers("tristan0x")
+    maintainers("cattabiani", "mikeg")
 
     version("develop", branch="master")
     version("master", branch="master")
