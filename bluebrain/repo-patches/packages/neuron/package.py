@@ -174,6 +174,16 @@ class Neuron(BuiltinNeuron):
             host_compiler = host_compiler_candidates[0]
             args.append(self.define("CMAKE_CUDA_HOST_COMPILER", host_compiler.cxx))
 
+        # Here we added some FENV_ACCESS calls: https://github.com/neuronsimulator/nrn/pull/2856
+        # This is a workaround for llvm clang because FENV_ACCESS ON is not allowed if the math is
+        # not at least "precise". In gcc this line in neuron: `set(UNSAFE_MATH_FLAG
+        # "-ffinite-math-only -fno-math-errno -funsafe-math-optimizations -fno-associative-math")`
+        # and in particular -ffinite-math-only is enough to set it on or they are compatible.
+        # If set the flags from here to ffp=strict theya re overridden in neuron and the problems
+        # still appears. This should be fixed in neuron itself
+        # TODO: link issue once done
+        if self.compiler.name == "clang":
+            args.append(self.define("NRN_ENABLE_MATH_OPT", False))
         return args
 
     def setup_run_environment(self, env):
