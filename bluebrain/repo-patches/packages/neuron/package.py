@@ -181,7 +181,7 @@ class Neuron(BuiltinNeuron):
         # and in particular -ffinite-math-only is enough to set it on or they are compatible.
         # If set the flags from here to ffp=strict theya re overridden in neuron and the problems
         # still appears. This should be fixed in neuron itself
-        # TODO: link issue once done
+        # https://github.com/neuronsimulator/nrn/issues/3504
         if self.compiler.name == "clang":
             args.append(self.define("NRN_ENABLE_MATH_OPT", False))
         return args
