@@ -78,7 +78,8 @@ class Neuron(BuiltinNeuron):
     )
 
     # standard deployment uses submodule to avoid compatibility issues
-    depends_on("nmodl", type=("build", "run"), when="+coreneuron")
+    depends_on("py-jinja2", type=("build", "run"))
+    depends_on("py-pyyaml", type=("build", "run"))
     depends_on("libsonata-report", when="+report+coreneuron")
 
     # lazy users do not want to load a compiler module to compile things, and we need a
@@ -159,7 +160,6 @@ class Neuron(BuiltinNeuron):
             args.append(self.define("CORENRN_ENABLE_PRCELLSTATE", "ON"))
 
         if spec.satisfies("+coreneuron"):
-            args.append(self.define("CORENRN_NMODL_DIR", spec["nmodl"].prefix))
             args.append(self.define_from_variant("CORENRN_ENABLE_REPORTING", "report"))
 
         if spec.satisfies("+gpu"):
