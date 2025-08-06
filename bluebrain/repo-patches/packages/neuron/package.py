@@ -81,6 +81,7 @@ class Neuron(BuiltinNeuron):
     depends_on("py-jinja2", type=("build", "run"))
     depends_on("py-pyyaml", type=("build", "run"))
     depends_on("libsonata-report", when="+report+coreneuron")
+    depends_on("fmt", type=("build", "run"))
 
     # lazy users do not want to load a compiler module to compile things, and we need a
     # more modern linker
