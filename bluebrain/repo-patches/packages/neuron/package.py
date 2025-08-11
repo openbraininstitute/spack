@@ -187,7 +187,7 @@ class Neuron(BuiltinNeuron):
             args.append(self.define("NRN_ENABLE_MATH_OPT", False))
 
         # Inject fmt paths from Spack spec
-        fmt_spec = spec['fmt']
+        fmt_spec = spec["fmt"]
         args.append(self.define("FMT_LIB_DIR", fmt_spec.prefix.lib))
         args.append(self.define("FMT_INC_DIR", fmt_spec.prefix.include))
         args.append(self.define("FMT_PKGCONFIG_DIR", fmt_spec.prefix.lib.pkgconfig))
