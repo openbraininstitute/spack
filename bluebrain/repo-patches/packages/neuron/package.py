@@ -185,6 +185,13 @@ class Neuron(BuiltinNeuron):
         # https://github.com/neuronsimulator/nrn/issues/3504
         if self.compiler.name == "clang":
             args.append(self.define("NRN_ENABLE_MATH_OPT", False))
+
+        # Inject fmt paths from Spack spec
+        fmt_spec = spec['fmt']
+        args.append(self.define("FMT_LIB_DIR", fmt_spec.prefix.lib))
+        args.append(self.define("FMT_INC_DIR", fmt_spec.prefix.include))
+        args.append(self.define("FMT_PKGCONFIG_DIR", fmt_spec.prefix.lib.pkgconfig))
+        args.append(self.define("FMT_CMAKE_DIR", fmt_spec.prefix.lib.cmake.fmt))
         return args
 
     def setup_run_environment(self, env):
