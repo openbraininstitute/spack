@@ -13,6 +13,7 @@ class PyNeurodamus(PythonPackage):
     pypi = "neurodamus/neurodamus-3.1.1.tar.gz"
 
     version("develop", branch="main")
+    version("3.11.0", sha256="7b66a822863c3446ed3160a6a1a45b1b6308112a52cec616bc087f88bf841746")
     version("3.10.0", sha256="7ae17ca8ba86abb457dbecbc841eac29dcccb0b4a6a03fff98bb02da15d6aea8")
     version("3.9.0", sha256="eef43faf7dcbf8142bcd705d486542f571273beef87c1ee8b365ce8e291297cb")
     version("3.8.0", sha256="aef1f5ea44d69e7191d484d37b377941b361e601de9283b96711c4408901a97c")
