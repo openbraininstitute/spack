@@ -16,6 +16,7 @@ class Neuron(BuiltinNeuron):
 
     # BBP specific version
     version("develop", branch="master")
+    version("9.0.0", commit="31530e2")
     version("9.0.a19", commit="7175203")
     version("9.0.a18", commit="942d5ef")
     version("9.0.a17", commit="c48d7d5")
