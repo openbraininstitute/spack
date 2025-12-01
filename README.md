@@ -9,8 +9,8 @@ Workflows](bluebrain/documentation/Workflows.md).
 For some common issues, please see the [FAQ](bluebrain/documentation/FAQ.md). Further
 documentation:
 
-
-* [Setting Spack up on personal machines](bluebrain/documentation/setup_personal.md)
+* [Setting Spack up on personal machines (OBI)](bluebrain/documentation/setup_OBI.md)
+* [Setting Spack up on personal machines (old)](bluebrain/documentation/setup_personal.md)
 * [Installing software from local sources directories](bluebrain/documentation/installing_from_source.md)
 * [Installing software using environments](bluebrain/documentation/installing_with_environments.md),
   allowing to customize software used in complex build scenarios
