@@ -18,6 +18,7 @@ class LibsonataReport(CMakePackage):
     git = "https://github.com/openbraininstitute/libsonatareport.git"
 
     version("develop", branch="master", submodules=False, get_full_repo=True)
+    version("2.0.0", tag="2.0.0", submodules=False)
     version("1.2.7", tag="1.2.7", submodules=False)
     version("1.2.6", tag="1.2.6", submodules=False)
     version("1.2.5", tag="1.2.5", submodules=False)
