@@ -146,7 +146,7 @@ If you get an error like:
 spack-install raised AttributeError: module 'ast' has no attribute 'Str'
 ```
 
-it usually means you installed a version of Python newer than 3.9, and `python3` resolves to that version. Spack cannot work with Python 3.10+ and porting all the changes from the original Spack to support it is a major effort.  
+it usually means you installed a version of Python newer than 3.9, and `python3` resolves to that version. Our spack cannot work with Python 3.10+ and porting all the changes from the original Spack to support it is a major effort.  
 
 The simplest solution is to remove the Homebrew `python3` symlink:
 
