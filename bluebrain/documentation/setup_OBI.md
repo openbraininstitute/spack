@@ -136,3 +136,24 @@ spack spec python
 ```
 
 If both commands run without errors, your Spack setup is ready for OBI macOS systems.
+
+## Problems with newer Python (3.10+)
+
+If you get an error like:
+
+```bash
+==> Error: cannot bootstrap the "clingo" Python module from spec "clingo-bootstrap@spack+python ..."
+spack-install raised AttributeError: module 'ast' has no attribute 'Str'
+```
+
+it usually means you installed a version of Python newer than 3.9, and `python3` resolves to that version. Our spack cannot work with Python 3.10+ and porting all the changes from the original Spack to support it is a major effort.  
+
+The simplest solution is to remove the Homebrew `python3` symlink:
+
+```bash
+rm /opt/homebrew/bin/python3
+```
+
+This forces Spack to use the system Python (usually 3.9).
+
+**Drawback**: to use Homebrew Python, you now need to call `python3.xx` (e.g., `python3.14` or `python3.11`). In practice, if you use virtual environments, this is rarely needed.
