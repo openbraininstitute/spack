@@ -12,6 +12,7 @@ class PyPackaging(PythonPackage):
     homepage = "https://github.com/pypa/packaging"
     pypi = "packaging/packaging-19.2.tar.gz"
 
+    version("26.0", sha256="00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4")
     version("23.1", sha256="a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f")
     version("23.0", sha256="b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97")
     version("21.3", sha256="dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb")
@@ -22,6 +23,8 @@ class PyPackaging(PythonPackage):
     version("19.0", sha256="0c98a5d0be38ed775798ece1b9727178c4469d9c3b4ada66e8e6b7849f8732af")
     version("17.1", sha256="f019b770dd64e585a99714f1fd5e01c7a8f11b45635aa953fd41c689a657375b")
     version("16.8", sha256="5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e")
+
+    patch("pep517_license_fix.patch", when="@26.0")
 
     depends_on("py-flit-core@3.3:", when="@22:", type="build")
 
