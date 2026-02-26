@@ -39,4 +39,3 @@ class PyPackaging(PythonPackage):
     depends_on("py-pyparsing@2.0.2:", when="@:21.0", type=("build", "run"))
     depends_on("py-six", when="@:20.7", type=("build", "run"))
     depends_on("py-attrs", when="@19.1", type=("build", "run"))
-    
