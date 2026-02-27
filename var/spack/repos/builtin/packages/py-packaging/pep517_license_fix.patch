@@ -1,0 +1,5 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -10 +10 @@
+-license = "Apache-2.0 OR BSD-2-Clause"
++license = { text = "Apache-2.0 OR BSD-2-Clause" }
